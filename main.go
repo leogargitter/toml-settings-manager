@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"strconv"
 
 	"github.com/charmbracelet/huh"
 )
@@ -39,11 +40,25 @@ func createFormFromStruct(s interface{}) *huh.Form {
 			// Create inputs based on type
 			switch subFieldValue.Kind() {
 			case reflect.String:
-				fields = append(fields, huh.NewInput().Title(tag))
+				value := subFieldValue.String()
+				fields = append(fields, huh.NewInput().Title(tag).Value(&value))
 			case reflect.Int:
-				fields = append(fields, huh.NewInput().Title(tag))
+				value := strconv.FormatInt(subFieldValue.Int(), 10)
+				fields = append(fields, huh.NewInput().Title(tag).Value(&value))
+			case reflect.Float32:
+				value := strconv.FormatFloat(subFieldValue.Float(), 'f', -1, 32)
+				fields = append(fields, huh.NewInput().Title(tag).Value(&value))
+			case reflect.Float64:
+				value := strconv.FormatFloat(subFieldValue.Float(), 'f', -1, 64)
+				fields = append(fields, huh.NewInput().Title(tag).Value(&value))
 			case reflect.Bool:
-				fields = append(fields, huh.NewSelect[bool]().Title(tag))
+				value := subFieldValue.Bool()
+				fields = append(fields, huh.NewSelect[bool]().Title(tag).
+					Options(
+						huh.NewOption("True", true),
+						huh.NewOption("False", false),
+					).
+					Value(&value))
 			}
 
 		}
