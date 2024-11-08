@@ -41,16 +41,45 @@ func createFormFromStruct(s interface{}) *huh.Form {
 			switch subFieldValue.Kind() {
 			case reflect.String:
 				value := subFieldValue.String()
-				fields = append(fields, huh.NewInput().Title(tag).Value(&value))
+				fields = append(fields, huh.NewInput().
+					Title(tag).
+					Value(&value))
 			case reflect.Int:
 				value := strconv.FormatInt(subFieldValue.Int(), 10)
-				fields = append(fields, huh.NewInput().Title(tag).Value(&value))
+				fields = append(fields, huh.NewInput().
+					Title(tag).
+					Value(&value).
+					Validate(func(str string) error {
+						_, err := strconv.Atoi(str)
+						if err != nil {
+							return fmt.Errorf("%s must be an integer", tag)
+						}
+						return nil
+					}))
 			case reflect.Float32:
 				value := strconv.FormatFloat(subFieldValue.Float(), 'f', -1, 32)
-				fields = append(fields, huh.NewInput().Title(tag).Value(&value))
+				fields = append(fields, huh.NewInput().
+					Title(tag).
+					Value(&value).
+					Validate(func(str string) error {
+						_, err := strconv.ParseFloat(str, 32)
+						if err != nil {
+							return fmt.Errorf("%s must be a float", tag)
+						}
+						return nil
+					}))
 			case reflect.Float64:
 				value := strconv.FormatFloat(subFieldValue.Float(), 'f', -1, 64)
-				fields = append(fields, huh.NewInput().Title(tag).Value(&value))
+				fields = append(fields, huh.NewInput().
+					Title(tag).
+					Value(&value).
+					Validate(func(str string) error {
+						_, err := strconv.ParseFloat(str, 64)
+						if err != nil {
+							return fmt.Errorf("%s must be a float", tag)
+						}
+						return nil
+					}))
 			case reflect.Bool:
 				value := subFieldValue.Bool()
 				fields = append(fields, huh.NewSelect[bool]().Title(tag).
