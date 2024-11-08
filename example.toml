@@ -1,0 +1,37 @@
+# Application configuration
+
+# Server settings
+[server]
+host = "localhost"   # The hostname or IP address where the server is hosted
+port = 8080          # Port on which the server listens
+
+# Database settings
+[database]
+user = "admin"       # Username to connect to the database
+password = "secret"  # Password for database authentication
+dbname = "example_db" # Name of the database
+
+# Logger settings
+[logger]
+level = "debug"      # Log level: debug, info, warn, error
+filepath = "/var/log/app.log" # Path to the log file
+
+# Features settings
+[features]
+enable_caching = true # Enable or disable caching
+max_cache_size = 256  # Maximum cache size in MB
+
+# Email notification settings
+[email]
+smtp_server = "smtp.example.com"
+smtp_port = 587
+username = "user@example.com"
+password = "emailpassword"
+from_address = "no-reply@example.com"
+to_addresses = ["admin@example.com", "support@example.com"]
+
+# Nested configuration for advanced settings
+[advanced]
+retry_attempts = 5    # Number of retry attempts on failure
+timeout = 30          # Timeout duration in seconds
+
